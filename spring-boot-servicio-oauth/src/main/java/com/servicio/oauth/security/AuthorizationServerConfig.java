@@ -36,14 +36,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
 	private InfoAdicionalToken infoAdicionalToken;
 
-//	@Value("${config.security.oauth.client.id}")
-//	private String ClientId;
-//	
-//	@Value("${config.security.oauth.client.secret}")
-//	private String passwordSecret;
-//	
-//	@Value("${config.security.oauth.jwt.key}")
-//	private String JWTKey;
+	@Value("${config.security.oauth.client.id}")
+	private String ClientId;
+	
+	@Value("${config.security.oauth.client.secret}")
+	private String passwordSecret;
+	
+	@Value("${config.security.oauth.jwt.key}")
+	private String JWTKey;
 	
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -54,8 +54,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 
-		clients.inMemory().withClient("FrontEndApp")
-				.secret(passwordEncoder.encode("12345"))
+		clients.inMemory().withClient("ClientId")
+				.secret(passwordEncoder.encode("passwordSecret"))
 				.scopes("read", "write").authorizedGrantTypes("password", "refresh_token")
 				.accessTokenValiditySeconds(3600).refreshTokenValiditySeconds(3600);
 	}
@@ -79,7 +79,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
-		tokenConverter.setSigningKey("codigo_secreto");
+		tokenConverter.setSigningKey("JWTKey");
 		return tokenConverter;
 	}
 
